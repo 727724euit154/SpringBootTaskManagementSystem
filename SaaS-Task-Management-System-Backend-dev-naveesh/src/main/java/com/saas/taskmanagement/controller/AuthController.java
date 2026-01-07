@@ -18,16 +18,28 @@ public class AuthController {
 
     @Autowired
     private UserRepo userRepo;
-
-   
     @PostMapping("/register")
     public ResponseEntity<User> register(@RequestBody User user) {
-
-       
         user.setRole(Role.USER);
         user.setStatus(true);
-
-        User savedUser = userRepo.save(user);
-        return new ResponseEntity<>(savedUser, HttpStatus.CREATED);
+        user.setEmail(user.getEmail());
+        user.setPassword(user.getPassword());
+        user.setUsername(user.getUsername());
+        return ResponseEntity.status(HttpStatus.CREATED).body(userRepo.save(user));
     }
+    
+    @PostMapping("/login")
+    public ResponseEntity<String> login(@RequestBody User user) {
+        User existingUser = userRepo.findByUsername(user.getUsername());
+        if (existingUser != null && existingUser.getPassword().equals(user.getPassword())) {
+            return ResponseEntity.ok("Login successful");
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
+        }
+    }
+    @PostMapping("/logout")
+    public ResponseEntity<String> logout() {
+        return ResponseEntity.ok("Logout successful");
+    }
+
 }
