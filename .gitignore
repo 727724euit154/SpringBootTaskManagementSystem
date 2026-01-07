@@ -1,6 +1,6 @@
-# Ignore all Maven target folders
+
+# Maven
 /target/
-**/target/
 
 # Logs
 *.log
