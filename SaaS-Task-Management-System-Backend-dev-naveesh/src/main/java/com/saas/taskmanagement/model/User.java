@@ -2,7 +2,8 @@ package com.saas.taskmanagement.model;
 
 
 
-import java.security.Timestamp;
+
+import java.time.LocalDateTime;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -11,8 +12,8 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
-import java.time.LocalDateTime;
 @Entity
 @Table(name="users")
 public class User {
@@ -28,7 +29,9 @@ public class User {
     private String fullname;
     @Enumerated(EnumType.STRING)
     private Role role;
+
     private Boolean status;
+    @Column(updatable=false)
     private LocalDateTime createdAt;
     public User() {
     }
@@ -77,12 +80,10 @@ public class User {
     public LocalDateTime getCreatedAt() {
         return createdAt;
     }
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
-    
-    
-    
-    
+   
+    @PrePersist
+    protected void onCreate() {
+    this.createdAt = LocalDateTime.now();
+}
 
 }

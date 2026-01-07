@@ -26,8 +26,7 @@ public class UserService {
         User current=getCurrentUser();
         current.setFullname(obj.getFullname());
         current.setEmail(obj.getEmail());
-        current.setCreatedAt(obj.getCreatedAt());
-        current.setStatus(obj.getStatus());
+        
         return userRepo.save(current);
         }
     public User changePassword(String newPassword) {
@@ -49,7 +48,7 @@ public class UserService {
        User current=getUserById(id);
        current.setFullname(obj.getFullname());
        current.setEmail(obj.getEmail());
-         current.setCreatedAt(obj.getCreatedAt());
+         
        return userRepo.save(current);
     }
     public User updateRoleById(int id, String role) {
