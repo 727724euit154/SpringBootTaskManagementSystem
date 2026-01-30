@@ -2,7 +2,6 @@ package com.saas.taskmanagement.controller;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -21,12 +20,17 @@ import com.saas.taskmanagement.service.TaskService;
 @RestController
 @RequestMapping("/api/tasks")
 public class TaskController {
-    @Autowired
-    TaskService service;
+    TaskService s;
+
+    public TaskController(TaskService s) {
+        this.s = s;
+    }
+
+
 
     @PostMapping
     public ResponseEntity<Task> createTask(@RequestBody Task task){
-        Task tas = service.createTask(task);
+        Task tas = s.createTask(task);
         if(tas !=null){
             return new ResponseEntity<>(tas, HttpStatus.CREATED);
         }
@@ -37,7 +41,7 @@ public class TaskController {
     }
     @GetMapping
     public ResponseEntity<List<Task>> getAllTasks(){
-        List<Task> tasks = service.getAllTasks();
+        List<Task> tasks = s.getAllTasks();
         if(!tasks.isEmpty()) return new ResponseEntity<>(tasks, HttpStatus.OK);
         return ResponseEntity
         .status(HttpStatus.NOT_FOUND)
@@ -45,7 +49,7 @@ public class TaskController {
     }
     @GetMapping("/{id}")
     public ResponseEntity<Task> getTaskById(@PathVariable Long id){
-        Task task = service.getTaskById(id);
+        Task task = s.getTaskById(id);
         if(task != null) return new ResponseEntity<>(task, HttpStatus.OK);
         return ResponseEntity
         .status(HttpStatus.NOT_FOUND)
@@ -53,7 +57,7 @@ public class TaskController {
     }
     @PutMapping
     public ResponseEntity<Task> updateTask(@RequestBody Task task){
-        Task tas = service.updateTask(task);
+        Task tas = s.updateTask(task);
         if(tas !=null){
             return new ResponseEntity<>(tas, HttpStatus.OK);
         }
@@ -64,7 +68,7 @@ public class TaskController {
     }
     @DeleteMapping("/{id}")
     public ResponseEntity<Boolean> deleteTask(@PathVariable Long id){
-        Boolean deleted = service.deleteTask(id);
+        Boolean deleted = s.deleteTask(id);
         if(deleted) return new ResponseEntity<>(deleted, HttpStatus.OK);
         return ResponseEntity
         .status(HttpStatus.NOT_FOUND)
