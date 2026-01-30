@@ -10,6 +10,7 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 
 
@@ -37,23 +38,22 @@ public class Task {
     @Column(updatable = false)
     private LocalDateTime createdAt;
 
+    @PrePersist
     protected void onCreate() {
-        this.createdAt = LocalDateTime.now();
+    this.createdAt = LocalDateTime.now();
+
+    if (this.status == null) {
+        this.status = TaskStatus.TODO;
     }
+    if (this.priority == null) {
+        this.priority = TaskPriority.MEDIUM;
+    }
+}
+
 
     public Task() {
     }
 
-    public Task(Long id, String title, String description, TaskStatus status, TaskPriority priority, LocalDate dueDate,
-            LocalDateTime createdAt) {
-        this.id = id;
-        this.title = title;
-        this.description = description;
-        this.status = status;
-        this.priority = priority;
-        this.dueDate = dueDate;
-        this.createdAt = createdAt;
-    }
 
     public Long getId() {
         return id;
