@@ -19,7 +19,6 @@ import jakarta.persistence.Table;
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-
     private int id;
     @Column(unique=true,nullable=false)
     private String username;
@@ -82,6 +81,10 @@ public class User {
     }
    
     @PrePersist
-    protected void onCreate() {
+protected void onCreate() {
     this.createdAt = LocalDateTime.now();
+    if (this.role == null) this.role = Role.USER;
+    if (this.status == null) this.status = true;
+}
+
 }
